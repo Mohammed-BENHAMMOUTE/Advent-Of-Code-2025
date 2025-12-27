@@ -11,6 +11,7 @@ import (
 func main() {
 	currentPosition := 50
 	numZeroes := 0
+	numZeroes2 := 0
 	const MOD = 100
 
 	file, err := os.Open("./input.txt")
@@ -21,7 +22,6 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 
@@ -38,9 +38,17 @@ func main() {
 
 		switch direction {
 		case 'R':
+			numZeroes2 += (currentPosition + distance) / MOD
 			currentPosition = (currentPosition + distance) % MOD
 
 		case 'L':
+			numZeroes2 += (distance / 100)
+			rest := distance % 100
+
+			if currentPosition > 0 && rest >= currentPosition {
+				numZeroes2++
+			}
+
 			currentPosition = ((currentPosition-distance)%MOD + MOD) % MOD
 		}
 
@@ -55,5 +63,7 @@ func main() {
 		fmt.Printf("Error reading line: %v\n", err)
 		return
 	}
-	fmt.Printf("Final Password (Total Zeroes): %d\n", numZeroes)
+
+	fmt.Printf("Part 1 : Final Password (Total Zeroes): %d\n", numZeroes)
+	fmt.Printf("Part 2 : Final Password (Total Zeroes): %d\n", numZeroes2)
 }
